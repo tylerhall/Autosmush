@@ -1,6 +1,8 @@
 Autosmush
 =========
 
+[Read the introductory blog post](http://clickontyler.com/blog/2010/10/automatically-compressing-your-amazon-s3-images-using-yahoos-smush-it-service/).
+
 Autosmush is a command line tool which scans an [Amazon S3](http://aws.amazon.com/s3/) bucket
 and losslessly compresses your images using Yahoo!'s amazing
 [Smush.it web service](http://developer.yahoo.com/yslow/smushit/). It also adds a far-future
