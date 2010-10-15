@@ -9,8 +9,8 @@
     // 3) Inside the unzipped folder, copy the 'sdk-x.x.x' folder into Autosmush's 'lib' folder
     // 4) Rename 'sdk-x.x.x' to 'sdk'
 
-    define('AWS_S3_KEY', '0NYVNQHMTB5MG8DEZ2G2');
-    define('AWS_S3_SECRET', 'aV9zkDrJ6MKvIgsa+xhEFog49XztCJ9SlljB7CGw');
+    define('AWS_S3_KEY', '');
+    define('AWS_S3_SECRET', '');
 
     // Prevent PHP 5.3 time zone warning...
     date_default_timezone_set('America/Los_Angeles');
