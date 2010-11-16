@@ -152,13 +152,13 @@
         }
 
         // Print our savings...
-        echo '  Files Smushed: ' . $files_smushed . "\n";
-        echo 'Could Not Smush: ' . $files_not_smushed . "\n";
-        echo '  Files Skipped: ' . $files_skipped . "\n\n";
-        echo '           Size: ' . bytes2str($total_uncompressed_bytes) . "\n";
-        echo 'Compressed Size: ' . bytes2str($total_compressed_bytes) . "\n\n";
-        echo '        Savings: ' . bytes2str($total_uncompressed_bytes - $total_compressed_bytes) . "\n";
-        echo '      Savings %: ' . round(($total_uncompressed_bytes - $total_compressed_bytes) / $total_uncompressed_bytes * 100, 2) . "%\n";
+        iflog('  Files Smushed: ' . $files_smushed . "\n");
+        iflog('Could Not Smush: ' . $files_not_smushed . "\n");
+        iflog('  Files Skipped: ' . $files_skipped . "\n\n");
+        iflog('           Size: ' . bytes2str($total_uncompressed_bytes) . "\n");
+        iflog('Compressed Size: ' . bytes2str($total_compressed_bytes) . "\n\n");
+        iflog('        Savings: ' . bytes2str($total_uncompressed_bytes - $total_compressed_bytes) . "\n");
+        iflog('      Savings %: ' . ($total_compressed_bytes !== 0) ? round(($total_uncompressed_bytes - $total_compressed_bytes) / $total_uncompressed_bytes * 100, 2) : 0 . "%\n");
     }
 
     function iflog($str)
