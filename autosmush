@@ -158,7 +158,7 @@
         iflog('           Size: ' . bytes2str($total_uncompressed_bytes) . "\n");
         iflog('Compressed Size: ' . bytes2str($total_compressed_bytes) . "\n\n");
         iflog('        Savings: ' . bytes2str($total_uncompressed_bytes - $total_compressed_bytes) . "\n");
-        iflog('      Savings %: ' . ($total_compressed_bytes !== 0) ? round(($total_uncompressed_bytes - $total_compressed_bytes) / $total_uncompressed_bytes * 100, 2) : 0 . "%\n");
+        iflog('      Savings %: ' . ($total_uncompressed_bytes === 0) ? 0 : round(($total_uncompressed_bytes - $total_compressed_bytes) / $total_uncompressed_bytes * 100, 2)  . "%\n");
     }
 
     function iflog($str)
