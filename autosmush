@@ -9,6 +9,7 @@
     // 3) Inside the unzipped folder, copy the 'sdk-x.x.x' folder into Autosmush's 'lib' folder
     // 4) Rename 'sdk-x.x.x' to 'sdk'
 
+	// Enter your credentials
     define('AWS_S3_KEY', '');
     define('AWS_S3_SECRET', '');
 
@@ -65,38 +66,44 @@
         // Get the bucket's contents...
         $s3      = new AmazonS3(AWS_S3_KEY, AWS_S3_SECRET);
         $options = array('prefix' => $bucket_path);
-        $xml     = $s3->list_objects($bucket_name, $options);
-
-        if((string)$xml->status != '200')
+        
+        // Check bucket's headers
+        $bucket	 = $s3->get_bucket_headers($bucket_name, $options);
+        
+        // Quit if the bucket can't be found
+        if((string)$bucket->status != '200')
             die("Error: Unable to retrieve bucket contents.\n");
-
+        
+        // Get file list
+        $files	= $s3->get_object_list($bucket_name, $options);
+        
         // Quit if the bucket is empty
-        if(!isset($xml->body) || !isset($xml->body->Contents))
-            die("\n");
+        if(count($files) == 0)
+            die("Error: No files found.\n");
 
         // Loop through everything in the bucket and start smushing...
         $smush = new SmushIt();
-        foreach($xml->body->Contents as $object)
+        foreach($files as $object)
         {
             // Only smush images...
-            if(preg_match('/\.(jpg|jpeg|png)$/i', (string)$object->Key) === 1)
+            if(preg_match('/\.(jpg|jpeg|png)$/i', $object) === 1)
             {
                 // But first, check to see if the image has already been smushed...
-                $headers = $s3->get_object_headers($bucket_name, $object->Key);
+                $headers = $s3->get_object_headers($bucket_name, $object);
                 if(isset($headers->header['x-amz-meta-smushed']))
                 {
-                    iflog("SKIPPED: {$object->Key} already smushed\n");
+                    iflog("SKIPPED: {$object} already smushed\n");
                     $files_skipped++;
                     continue;
                 }
 
                 // Smush the image
-                $smush->smushURL("http://s3.amazonaws.com/$bucket_name/" . $object->Key);
+                $smush->smushURL("http://s3.amazonaws.com/$bucket_name/" . $object);
 
                 // If Smush.it was successful...
                 if($smush->savings)
                 {
-                    iflog("SMUSHED: {$object->Key} ({$smush->savings}%)\n");
+                    iflog("SMUSHED: {$object} ({$smush->savings}%)\n");
 
                     $files_smushed++;
                     $total_uncompressed_bytes += $smush->size;
@@ -123,17 +130,20 @@
                                             'meta' => array('smushed' => 'yes'),
                                             'headers' => array('expires' => date('D, j M Y H:i:s', time() + (86400 * 365 * 10)) . ' GMT')
                                             );
-                            $s3->create_object($bucket_name, $object->Key, $options);
+                            $s3->create_object($bucket_name, $object, $options);
+                            
+                            // Delete Temp File
+                            unlink($tmp_filename);
                         }
                         else
                         {
-                            iflog("ERROR: Could not download smushed version of {$object->Key} \n");
+                            iflog("ERROR: Could not download smushed version of {$object} \n");
                         }
                     }
                 }
                 else
                 {
-                    iflog("NOT SMUSHED: {$object->Key} already compressed\n");
+                    iflog("NOT SMUSHED: {$object} already compressed\n");
                     $files_not_smushed++;
                     $total_uncompressed_bytes += $smush->size;
 
@@ -145,7 +155,7 @@
                                         'acl' => AmazonS3::ACL_PUBLIC,
                                         'headers' => array('expires' => date('D, j M Y H:i:s', time() + (86400 * 365 * 10)) . ' GMT')
                                         );
-                        $s3->update_object($bucket_name, $object->Key, $options);
+                        $s3->update_object($bucket_name, $object, $options);
                     }
                 }
             }
