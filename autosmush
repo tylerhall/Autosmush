@@ -64,7 +64,7 @@
         $total_uncompressed_bytes = 0;
 
         // Get the bucket's contents...
-        $s3      = new AmazonS3(AWS_S3_KEY, AWS_S3_SECRET);
+        $s3      = new AmazonS3(array('key' => AWS_S3_KEY, 'secret' => AWS_S3_SECRET));
         $options = array('prefix' => $bucket_path);
         
         // Check bucket's headers
