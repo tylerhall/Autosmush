@@ -4,7 +4,7 @@
     // Autosmush requires the Amazon PHP SDK, which is not included in this project.
     // To download and install the SDK, follow these steps...
     //
-    // 1) Download the AWS SDK for PHP from here: http://aws.amazon.com/sdkforphp/
+    // 1) Download the 1.6.x AWS SDK for PHP from here: https://github.com/amazonwebservices/aws-sdk-for-php/releases
     // 2) Unzip file
     // 3) Inside the unzipped folder, copy the 'sdk-x.x.x' folder into Autosmush's 'lib' folder
     // 4) Rename 'sdk-x.x.x' to 'sdk'
