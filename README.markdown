@@ -25,7 +25,7 @@ REQUIREMENTS
 ------------
 
  * Requires PHP5 and php_curl extension.
- * Requires the [AWS SDK for PHP](http://aws.amazon.com/sdkforphp/). (Download and install instructions are located inside autosmush.)
+ * Requires the 1.6.x [AWS SDK for PHP](https://github.com/amazonwebservices/aws-sdk-for-php/releases). (Download and install instructions are located inside autosmush.)
 
 USAGE
 -----
